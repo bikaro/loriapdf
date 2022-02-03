@@ -1,4 +1,5 @@
 # This is a sample Python script.
+import sys
 
 from pikepdf import Pdf, Page, Name, Rectangle
 
@@ -8,8 +9,8 @@ def to_one_page(pdf: Pdf, left: int, right: int, n: int = None) -> Page:
     Put's the to pages of given index onto one page which will be appended at
     the end of the document.
 
-    Note: Input pages should be in vertical orientation, output page is in
-    horizontal orientation. DIN A4 is used for the added page.
+    Note: Input pages should be in portrait format, output page is in
+    landscape format. DIN A4 is used for the added page.
 
     :param pdf: The document which will be manipulated.
     :param left: The index of the page that should be placed left.
@@ -37,7 +38,7 @@ def make_booklet(pdf: Pdf, delete_old_pages: bool = True):
     """
     Rearranges the pages so they can be printed as a booklet.
 
-    The output will an horizontal DIN A4 pdf.
+    The output will an landscape DIN A4 pdf.
 
     :param pdf: The document which will be manipulated.
     :param delete_old_pages: If True, old pages will be removed from the
@@ -54,9 +55,9 @@ def make_booklet(pdf: Pdf, delete_old_pages: bool = True):
 
 
 if __name__ == '__main__':
-    with Pdf.open('example2.pdf') as pdf:
-        del pdf.pages[11]
-        n = len(pdf.pages)
+    if len(sys.argv) <= 1:
+        print("Input file needed")
+        sys.exit()
+    with Pdf.open(sys.argv[1]) as pdf:
         make_booklet(pdf)
-
         pdf.save('output.pdf')
